@@ -1,0 +1,4 @@
+
+# config snippet to include bot files
+automation bot: !include jarvis.yaml
+automation rollo: !include jarvis_rollo.yaml
