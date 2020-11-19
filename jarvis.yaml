@@ -1,0 +1,34 @@
+- id: '1605444642682'
+  alias: Jarvis
+  description: ''
+  trigger:
+  - platform: event
+    event_type: telegram_command
+    event_data:
+      command: /help
+    context: {}
+  - platform: event
+    event_type: telegram_command
+    event_data:
+      command: /status
+    context: {}
+  action:
+  - service: telegram_bot.send_message
+    data_template:
+      message: |-
+        {% set cmd = trigger.event.data.command %} 
+        {% if cmd == "/status" %}
+          {% for state in states.switch %}
+            {{state.name}} ist {{state.state}}
+          {% endfor %}
+        {% elif cmd == "/help" %}
+          /status
+          /rollo
+        {% endif %}
+      target: |-
+        {% if trigger.event.data.group_id == null %} 
+          {{trigger.event.data.user_id}}
+        {% else %}
+          {{trigger.event.data.group_id}}
+        {% endif %}
+  mode: single
